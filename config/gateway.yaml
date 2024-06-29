@@ -1,0 +1,45 @@
+# config/services.yaml
+parameters:
+    gateway:
+        shift4_common: &shift4_common
+            enabled: true
+            api_url: ""
+            providerClass: "App\\PaymentProvider\\Gateways\\Shift4"
+            credentials:
+                secretKey: "%env(resolve:SHIFT4_API_SECRET_KEY)%"
+        aci_common: &aci_common
+            enabled: true
+            api_url: ""
+            providerClass: "App\\PaymentProvider\\Gateways\\Aci"
+            credentials:
+                authorization: "%env(resolve:ACI_API_BEARER_TOKEN)%"
+                entityId: "%env(resolve:ACI_API_ENTITY_ID)%"
+
+when@dev:
+    parameters:
+        gateway:
+            shift4:
+                <<: *shift4_common
+                api_url: "https://api.shift4.com"
+            aci:
+                <<: *aci_common
+                api_url: "https://eu-test.oppwa.com/v1"
+when@test:
+    parameters:
+        gateway:
+            shift4:
+                <<: *shift4_common
+                api_url: "https://api.shift4.com"
+            aci:
+                <<: *aci_common
+                api_url: "https://eu-test.oppwa.com/v1"
+
+when@prod:
+    parameters:
+        gateway:
+            shift4:
+                <<: *shift4_common
+                api_url: "https://api.shift4.com"
+            aci:
+                <<: *aci_common
+                api_url: "https://eu-prod.oppwa.com/v1"
